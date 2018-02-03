@@ -253,7 +253,7 @@ public class RandomBST {
         int height = height();
         int epl = externalPathLen();
         int ipl = internalPathLen();
-        if (!isBST(root)) {
+        if (!isBST()) {
             System.err.println("BST not in symmetric order");
             return;
         }
@@ -266,24 +266,16 @@ public class RandomBST {
     }
     
     private boolean isBST() {
-        return isBST(root);
+        return isBST(root, null, null);
     }
     
-    private boolean isBST(Node x) {
-        if (x.left != null && x.right != null){
-            if (x.key <= x.left.key || x.key >= x.right.key) return false;
-            else                                             return isBST(x.left) 
-                                                                 && isBST(x.right);
-        } else if (x.right != null) {
-            if (x.key >= x.right.key) return false;
-            else                      return isBST(x.right);
-        } else if (x.left != null) {
-            if (x.key <= x.left.key) return false;
-            else                     return isBST(x.left);
-        } else {
-            return true;  // internal nodes with no children always true
-        }
+    private boolean isBST(Node x, Node le, Node ri) {
+        if (x == null) return true;
+        if (le != null && x.key <= le.key) return false;
+        if (ri != null && x.key >= ri.key) return false;
+        return isBST(x.left, le, x) && isBST(x.right, x, ri);
     }
+    
     /* Used for debugging
     public StringBuilder x() {
         StringBuilder s = new StringBuilder();
